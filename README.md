@@ -12,21 +12,21 @@ Tutorial to Running in IntelliJ:
 }`
 6. Add the following Run Configurations:
 
-Run Configuration 1: (for MPI running)
-Name: MpiRun
-Run on: LocalMachine
-Module: -cp n_colloring_intelliJ.main
-Main class: org.example.Main
-Arguments: -
-Environment Variables: -
+Run Configuration 1: (for MPI running)     
+Name: ThreadRun        
+Run on: LocalMachine            
+Module: -cp n_colloring_intelliJ.main           
+Main class: org.example.Main           
+Arguments: -        
+Environment Variables: -        
 
 Run Configuration 2: (for normal thread running)
-Name: ThreadRun
-Run on: LocalMachine
-Module: -cp n_colloring_intelliJ.main
-Main class: runtime.starter.MPJRun
-Arguments: -np 4 -cp build/classes/java/main org.example.Main mpi
-Environment Variables: MPJ_HOME=C:\mpj\mpj-v0_44\mpj-v0_44
+Name: MpiRun       
+Run on: LocalMachine           
+Module: -cp n_colloring_intelliJ.main         
+Main class: runtime.starter.MPJRun           
+Arguments: -np 4 -cp build/classes/java/main org.example.Main mpi          
+Environment Variables: MPJ_HOME=C:\mpj\mpj-v0_44\mpj-v0_44         
 
 This project provides two parallel implementations for solving the **N-Graph Coloring Problem**:
 1. **MPI (Message Passing Interface):** Distributed memory approach using `MPJ Express`.
