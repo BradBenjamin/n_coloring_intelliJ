@@ -64,9 +64,11 @@ Dynamic Load Balancing: Tasks are not pre-assigned. The Master calculates a dete
 
 | Graph size    | Time | Nr_colors |
 | -------- | ------- | ------------|
-| 10       | 0.0047 s    |     5      |
-|   20 | 0.012 s    |       5 |
-|  50    | 0.317    |   9 |
+| 10       | 0.0047s    |     5      |
+|   20 | 0.012s    |       5 |
+|  50    | 0.317s   |   9 |
+|  70    | 0.014s   |   13 |
+|  100    | 0.0224s    |  15 |
 
 
 
