@@ -48,6 +48,35 @@ This implementation uses Java's Fork/Join Framework to split the workload across
  - Atomic Reference: Uses AtomicReference<int[]> finalResult as a global flag. All threads check this variable before doing work. If it is not null, they abort immediately, ensuring no CPU time is wasted after a solution is found.
  - Work Stealing: The ForkJoinPool automatically balances the load; idle threads "steal" tasks from busy threads, keeping all cores utilized.
 
+**Results**
+
+| Graph Size | Threads | Time (seconds)|
+|-----------|----------|----------------|
+|10         | 1       | 0.05529|
+|10         | 2       | 0.00130|
+|10         | 4       | 0.00141|
+|10         | 8       | 0.00471|
+|10         | 16      | 0.00408   |
+|-----------|--------------------------|
+|20         | 1       | 0.00202|
+|20         | 2       | 0.00428|
+|20         | 4       | 0.00405|
+|20         | 8       | 0.00257|
+|20         | 16      | 0.00090|
+|-----------|--------------------------|
+|30         | 1       | 0.00113|
+|30         | 2       | 0.00140|
+|30         | 4       | 0.00135|
+|30         | 8       | 0.00098|
+|30         | 16      | 0.00136|
+|-----------|--------------------------|
+|40         | 1       | 0.02037|
+|40         | 2       | 0.00355|
+|40         | 4       | 0.00265|
+|40         | 8       | 0.00241|
+|40         | 16      | 0.00194|
+|-----------|---------|-----------------|
+
  ## Approach 2: Distributed Memory (MPI)
 Target Environment: Computer Clusters / Supercomputers
 
