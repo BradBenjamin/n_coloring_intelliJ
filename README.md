@@ -32,19 +32,31 @@ This project provides two parallel implementations for solving the **N-Graph Col
 1. **MPI (Message Passing Interface):** Distributed memory approach using `MPJ Express`.
 2. **Multi-Threading:** Shared memory approach using Java Threads.
 
-The goal is to color a graph with `N` nodes using `M` colors such that no two adjacent nodes share the same color.
+## Approach 1: Distributed Memory (MPI)
+Target Environment: Computer Clusters / Supercomputers
 
-## 📂 Project Structure
+This implementation treats separate processes (often on different physical machines) as a team. They cannot share memory and must communicate by sending "messages" (data packets) over a network.
 
-```text
-src/main/java/org/example
-├── MPI/                 # Distributed Implementation
-│   ├── Main.java        # Entry point for MPI
-│   ├── Graph.java       # Graph data structure
-│   ├── Colours.java     # Color management
-│   └── GraphColouring.java # Recursive MPI logic
-│
-└── Thread/              # Multi-threaded Implementation
-    ├── Main.java        # Entry point for Threads
-    ├── Graph.java       # Graph data structure
-    └── GraphColouring.java # Recursive Thread logic
+**Architecture:** Master-Worker Pattern
+ - *Master (Rank 0):* Manages the recursion tree. When it reaches a branching point, it delegates a specific subtree to a waiting Worker process.
+ - *Workers (Rank>0):* Sit in an infinite loop waiting for tasks. Upon receiving a task, they attempt to solve it and return the result.
+
+**Key Mechanisms**
+Dynamic Load Balancing: Tasks are not pre-assigned. The Master calculates a deterministic "destination rank" based on the recursion depth (power) and color index. This spreads work across the cluster without a central queue.
+
+## Approach 2: Shared Memory (Multi-Threading)
+Target Environment: Single Multi-Core Machine
+
+This implementation uses Java's Fork/Join Framework to split the workload across CPU cores sharing the same RAM.
+
+**Architecture:** Recursive Task Parallelism    
+
+ - ForkJoinPool: Manages a pool of worker threads (defaulting to the number of CPU cores).          
+ - RecursiveTask: The problem is modeled as a task that returns an int[] (the solution).           
+ - Forking: If the problem is large (many nodes left to color), the algorithm splits the work: it keeps one color choice for the current thread and forks new tasks for other color choices.      
+ - Compute: If the problem is small (few nodes left), it solves it sequentially to avoid thread overhead.         
+
+**Key Mechanisms**
+ - Atomic Reference: Uses AtomicReference<int[]> finalResult as a global flag. All threads check this variable before doing work. If it is not null, they abort immediately, ensuring no CPU time is wasted after a solution is found.
+ - Work Stealing: The ForkJoinPool automatically balances the load; idle threads "steal" tasks from busy threads, keeping all cores utilized.
+
